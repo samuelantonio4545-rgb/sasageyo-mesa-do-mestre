@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mesa do Mestre</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/kenku-theme.css"></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="#mesa"><span class="sigil">✧</span><span>Mesa do Mestre</span></a>
+  <div class="source-links"><a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"><span class="source-icon spotify">≋</span>Spotify <span class="source-arrow">↗</span></a><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><span class="source-icon youtube">▶</span>YouTube <span class="source-arrow">↗</span></a></div>
+  <div class="campaign-label">SEU UNIVERSO</div><div id="campaign-name" class="campaign-name">Minha campanha</div>
+  <nav aria-label="Navegação principal">
+    <button data-view="mesa"><span>◈</span> Mesa de jogo</button>
+    <button data-view="ambientacao"><span>▦</span> Ambientação</button><button data-view="outros"><span>▧</span> Outros</button>
+    <button data-view="personagens"><span>♙</span> Personagens</button>
+    <button data-view="audio" class="active"><span>♫</span> Áudio & efeitos</button>
+    <button data-view="agenda"><span>▤</span> Agenda</button>
+    <button data-view="notas"><span>✎</span> Diário privado</button>
+    <button data-view="conexoes"><span>⚙</span> Conexões</button>
+  </nav>
+  <div class="sidebar-foot"><span class="dot"></span> ARQUIVOS LOCAIS<br><small>Seu mundo, nos seus arquivos.</small><a href="/api/backup" download>↓ Exportar backup</a></div>
+</aside>
+<main>
+  <header class="topbar"><div class="workspace-tab"><span>◉</span><span id="crumb">Áudio & efeitos</span></div><button class="tab-add" data-action="new" data-kind="musica" aria-label="Adicionar material">+</button><button id="connection-status" class="status">○ Bot desconectado</button></header>
+  <section id="content" aria-live="polite"></section>
+  <footer class="app-footer">MESA DO MESTRE <span>v1.7 · Local · A agenda funciona com o programa aberto.</span></footer>
+</main>
+<section class="player-dock" aria-label="Player do Kenku">
+  <div class="now-playing"><span class="track-art">♫</span><div><strong id="track-title">Nenhuma faixa em reprodução</strong><span id="track-subtitle">Selecione uma faixa no player integrado</span></div></div>
+  <div class="transport"><button data-action="kenku" data-command="previous" aria-label="Faixa anterior" title="Faixa anterior">⏮</button><button id="player-toggle" class="play-main" data-action="kenku" data-command="resume" aria-label="Reproduzir" title="Reproduzir">▶</button><button data-action="kenku" data-command="next" aria-label="Próxima faixa" title="Próxima faixa">⏭</button><button data-action="player-sync" aria-label="Atualizar estado do player" title="Atualizar estado">↻</button></div>
+  <label class="dock-volume"><span>♪</span><input id="player-volume" type="range" min="0" max="100" value="70" aria-label="Volume do Kenku"><span id="volume-value">70%</span></label>
+  <div class="track-progress"><span id="track-elapsed">0:00</span><progress id="track-progress" max="1" value="0" aria-label="Progresso da faixa"></progress><span id="track-duration">—:—</span></div>
+</section>
+<dialog id="editor"><form id="item-form"><div class="dialog-head"><div><div class="eyebrow">ACERVO DA CAMPANHA</div><h2 id="editor-title">Novo item</h2></div><button type="button" class="icon close-dialog" aria-label="Fechar">×</button></div><input name="id" type="hidden"><input name="file" type="hidden">
+<div class="form-grid">
+  <label>Tipo<select name="kind"><option value="personagem">Personagem</option><option value="imagem">Imagem / documento</option><option value="musica">Música / efeito</option><option value="cena">Cena</option><option value="nota">Nota privada</option></select></label>
+  <label>Nome<input name="title" required maxlength="200" placeholder="Ex.: A chegada da embaixadora"></label>
+  <label>Categoria<input name="category" maxlength="120" placeholder="Ex.: Ambientação, Luta, Cidade"></label>
+  <label>Seção<select name="section"><option value="personagens">Personagens</option><option value="ambientacao">Ambientação</option><option value="outros">Outros</option><option value="audio">Trilhas sonoras</option></select></label><label>Pasta<select name="folder_id"></select></label>
+  <label>Etiquetas<input name="tags" maxlength="300" placeholder="Ex.: sessão 4, floresta"></label>
+  <label data-for="personagem">Afiliação<input name="affiliation" maxlength="200" placeholder="Ex.: Conselho das Cinzas"></label>
+  <label data-for="personagem imagem cena">Canal de destino (opcional)<input name="channel" inputmode="numeric" placeholder="Usa o canal padrão se vazio"></label>
+  <label class="wide">Descrição pública<textarea name="description" maxlength="3500" rows="3" placeholder="O texto que os jogadores poderão ver."></textarea></label>
+  <label class="wide">Anotações privadas<textarea name="private" maxlength="8000" rows="3" placeholder="Segredos, motivações e lembretes. Nunca enviados ao Discord."></textarea></label>
+  <label data-for="musica imagem">Link de referência<input name="url" type="url" placeholder="https://..."></label>
+  <label data-for="personagem imagem musica cena">Arquivo (até 12 MB)<input name="upload" type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.mp3,.ogg,.wav,.m4a,.pdf"><small id="file-label">Uma cópia será guardada na biblioteca.</small></label>
+  <label data-for="musica">ID no Kenku<input name="kenku_id" placeholder="Copie o ID pelo menu do Kenku"></label>
+  <label data-for="musica">Reproduzir como<select name="kenku_type"><option value="playlist">Faixa / playlist</option><option value="soundboard">Efeito / soundboard</option></select></label>
+  <fieldset class="wide" data-for="cena"><legend>Itens da cena</legend><p class="muted">A apresentação da cena é enviada primeiro. Os itens abaixo seguem a ordem exibida.</p><div id="scene-members"></div></fieldset>
+</div><div class="dialog-actions"><button type="button" class="secondary close-dialog">Cancelar</button><button type="submit" class="primary">Salvar item</button></div><p class="form-error" role="alert"></p></form></dialog>
+<dialog id="reveal-dialog"><form id="reveal-form"><div class="dialog-head"><div><div class="eyebrow">O QUE OS JOGADORES VÃO VER</div><h2>Preparar disparo</h2></div><button type="button" class="icon close-dialog" aria-label="Fechar">×</button></div><input name="item_id" type="hidden"><label>Canal de texto<input name="channel" required inputmode="numeric"></label><div id="preview"></div><label>Agendar para (opcional)<input type="datetime-local" name="when"></label><p class="muted">Vazio = disparar agora. A agenda usa o horário deste computador. Notas privadas ficam fora do envio.</p><div class="dialog-actions"><button type="button" class="secondary close-dialog">Cancelar</button><button type="submit" class="primary">Confirmar disparo</button></div><p class="form-error" role="alert"></p></form></dialog>
+<dialog id="poll-dialog"><form id="poll-form"><div class="dialog-head"><div><div class="eyebrow">REÚNA O GRUPO</div><h2>Enquete de sessão</h2></div><button type="button" class="icon close-dialog" aria-label="Fechar">×</button></div><label>Pergunta<input name="title" required maxlength="200" value="Quando vamos jogar nossa próxima sessão?"></label><label>Opções, uma por linha<textarea name="answers" required rows="5" placeholder="Sexta às 20h&#10;Sábado às 19h&#10;Domingo às 16h"></textarea></label><div class="form-grid"><label>Canal de texto<input name="channel" required inputmode="numeric"></label><label>Votação aberta por (horas)<input type="number" name="duration" min="1" max="768" value="48" required></label><label class="wide">Publicar em (opcional)<input type="datetime-local" name="when"></label></div><label class="check"><input type="checkbox" name="weekly"> Repetir semanalmente com as mesmas opções</label><p class="muted">Na repetição, use dias da semana em vez de datas fixas. Todos podem marcar mais de uma opção.</p><div class="dialog-actions"><button type="button" class="secondary close-dialog">Cancelar</button><button type="submit" class="primary">Criar enquete</button></div><p class="form-error" role="alert"></p></form></dialog>
+<dialog id="session-dialog"><form id="session-form"><div class="dialog-head"><div><div class="eyebrow">DATA ESCOLHIDA</div><h2>Confirmar sessão</h2></div><button type="button" class="icon close-dialog" aria-label="Fechar">×</button></div><label>Nome da sessão<input name="title" required maxlength="200" placeholder="Ex.: Sessão 4 — O Conselho das Cinzas"></label><label>Data e horário<input type="datetime-local" name="when" required></label><label>Canal de texto<input name="channel" required inputmode="numeric"></label><label class="check"><input type="checkbox" name="reminders" checked> Lembrar 24 horas e 1 hora antes</label><p class="muted">Publica a confirmação agora e agenda os lembretes que ainda estiverem no futuro. O programa precisa estar aberto para enviá-los.</p><div class="dialog-actions"><button type="button" class="secondary close-dialog">Cancelar</button><button type="submit" class="primary">Confirmar e programar lembretes</button></div><p class="form-error" role="alert"></p></form></dialog>
+<dialog id="results-dialog"><div class="dialog-head"><h2>Disponibilidade do grupo</h2><button class="icon close-dialog" aria-label="Fechar">×</button></div><div id="results"></div><button class="primary" data-action="session">Confirmar data da sessão</button></dialog>
+<dialog id="folder-dialog"><form id="folder-form"><h2 id="folder-title">Nova pasta</h2><input name="id" type="hidden"><label>Nome da pasta<input name="title" required maxlength="200" autofocus></label><div class="dialog-actions"><button type="button" class="close-dialog">Cancelar</button><button type="submit" class="primary">Salvar pasta</button></div><p class="form-error" role="alert"></p></form></dialog>
+<div id="toast" role="status" hidden></div>
+<script src="/app.js"></script>
+</body></html>
